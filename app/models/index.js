@@ -14,7 +14,6 @@ let sequelize = new Sequelize(
   config.password,
   config
 );
-console.log("holit");
 // sequelize.sync({ alter: true });
 //Associations
 fs.readdirSync(__dirname)

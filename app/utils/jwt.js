@@ -6,18 +6,13 @@ const generateAccessToken = (user) => {
   return new Promise((resolve, reject) => {
     const payload = {
       id: user.id,
-      type_doc: user.type_doc,
-      num_doc: user.num_doc,
-      name: user.name,
-      lastname: user.lastname,
       email: user.email,
-      tel: user.tel,
-      role: user.role,
+      role: user.id_rol,
       active: user.active,
       createToken: getUnixTime(new Date()),
-      exp: addDays(getUnixTime(new Date(), EXPIRES_IN)),
+      exp: getUnixTime(addDays(new Date(), EXPIRES_IN)),
     };
-    jwt.sign(payload, SECRET_KEY, { EXPIRES_IN }, (err, token) => {
+    jwt.sign(payload, SECRET_KEY, (err, token) => {
       if (err) {
         console.log(err);
         reject("No se pudo generar el token, intente de nuevo.");
@@ -31,9 +26,9 @@ const generateRefreshToken = (user) => {
   return new Promise((resolve, reject) => {
     const payload = {
       id: user.id,
-      exp: addDays(getUnixTime(new Date(), 30)),
+      exp: getUnixTime(addDays(new Date(), 30)),
     };
-    jwt.sign(payload, SECRET_KEY, { EXPIRES_IN }, (err, token) => {
+    jwt.sign(payload, SECRET_KEY, (err, token) => {
       if (err) {
         console.log(err);
         reject("No se pudo generar el token, intente de nuevo.");
@@ -55,8 +50,24 @@ const verifyToken = (token) => {
   });
 };
 
+const willExpiredToken = (token) => {
+  const result = jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) {
+      console.log(err);
+      reject("No se pudo verificar el token, intente de nuevo.");
+    }
+    if (getUnixTime(new Date()) >= decoded.exp) {
+      return { isTokenExpired: true, token: decoded };
+    } else {
+      return { isTokenExpired: false, token: decoded };
+    }
+  });
+  return result;
+};
+
 module.exports = {
   generateAccessToken,
   generateRefreshToken,
   verifyToken,
+  willExpiredToken,
 };

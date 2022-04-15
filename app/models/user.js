@@ -18,9 +18,6 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: "El nombre es requerido",
           },
-          isAlpha: {
-            msg: "El nombre solo puede contener letras",
-          },
         },
       },
       lastname: {
@@ -29,9 +26,6 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notEmpty: {
             msg: "El apellido es requerido",
-          },
-          isAlpha: {
-            msg: "El apellido solo puede contener letras",
           },
         },
       },

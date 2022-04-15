@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       date_birth: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         validate: {
           isDate: {
             msg: "La fecha de nacimiento no es valida",
@@ -99,11 +99,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       marital_status: {
         type: DataTypes.STRING(20),
-        validate: {
-          isAlpha: {
-            msg: "El estado civil solo puede contener letras",
-          },
-        },
+        validate: {},
       },
       edu_level: {
         type: DataTypes.STRING(20),
@@ -171,11 +167,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       home_address: {
         type: DataTypes.STRING(100),
-        validate: {
-          isAlpha: {
-            msg: "La direccion de residencia solo puede contener letras",
-          },
-        },
+        validate: {},
       },
       years_resi: {
         type: DataTypes.INTEGER(3),
@@ -244,7 +236,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       date_current_job: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         validate: {
           isDate: {
             msg: "La fecha de ingreso al actual trabajo debe ser una fecha valida",

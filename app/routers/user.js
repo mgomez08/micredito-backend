@@ -21,5 +21,6 @@ api.get(
   validateJWT,
   UserController.getFinancialInfo
 );
+api.get("/user/get-columns-nulls", validateJWT, UserController.getColumnsNull);
 
 module.exports = api;

@@ -1,4 +1,4 @@
-const { User } = require("../models/index");
+const { User, Sequelize } = require("../models/index");
 const { comparePassword, hashPassword } = require("../utils/bcrypt");
 const { format, parseISO, differenceInYears } = require("date-fns");
 
@@ -367,10 +367,38 @@ const getFinancialInfo = async (req, res) => {
   } catch (error) {}
 };
 
+const getColumnsNull = async (req, res) => {
+  try {
+    const columnsNull = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      attributes: [
+        [
+          Sequelize.literal(
+            `SUM((date_birth = '0000-00-00') +(depart_birth = '') +(city_birth = '') +(age IS NULL) +(marital_status = '') +(edu_level = '') +(profession = '') +(occupation = '') +(num_per_family_ncl IS NULL) +(num_per_depen IS NULL) +(type_housing = '') +(depart_resi = '') +(city_resi = '') +(home_address = '') +(years_resi IS NULL) + IFNULL((years_experience IS NULL) +(date_current_job = '0000-00-00') + +(work_position = '') +(type_salary = "") +(type_contract = '') +(total_assets IS NULL) +(monthly_salary IS NULL) +(additional_income IS NULL) +(total_monthly_income IS NULL) +(monthly_expenditure IS NULL),7))`
+          ),
+          "value",
+        ],
+      ],
+    });
+    return res.status(200).send({
+      ok: true,
+      data: columnsNull,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      ok: false,
+      msg: "Error al obtener las columnas nulas",
+    });
+  }
+};
 module.exports = {
   changePassword,
   savePersonalInfo,
   getPersonalInfo,
   saveFinancialInfo,
   getFinancialInfo,
+  getColumnsNull,
 };

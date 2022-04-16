@@ -1,6 +1,15 @@
 const { User, Sequelize } = require("../models/index");
+const { Op } = require("sequelize");
 const { comparePassword, hashPassword } = require("../utils/bcrypt");
 const { format, parseISO, differenceInYears } = require("date-fns");
+const math = require("mathjs");
+const {
+  convertCredit,
+  convertAssets,
+  convertExpenditure,
+  convertMonthlySalary,
+  convertAdditionalIncome,
+} = require("../utils/convertValues");
 
 const changePassword = async (req, res) => {
   try {
@@ -557,6 +566,132 @@ const getScoringInfo = async (req, res) => {
   }
 };
 
+const calculateScoring = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: [
+        "id",
+        ["total_assets", "totalassets"],
+        ["monthly_salary", "monthlysalary"],
+        ["additional_income", "additionalincome"],
+        ["monthly_expenditure", "monthlyexpenditure"],
+        ["have_credits", "havecredits"],
+        ["amount_credit_acquired", "amountcreditacquired"],
+        ["days_past_due", "dayspastdue"],
+      ],
+      where: {
+        [Op.and]: {
+          total_assets: {
+            [Op.not]: null,
+          },
+          monthly_salary: {
+            [Op.not]: null,
+          },
+          additional_income: {
+            [Op.not]: null,
+          },
+          monthly_expenditure: {
+            [Op.not]: null,
+          },
+        },
+      },
+    });
+
+    if (!users) {
+      return res.status(400).send({
+        ok: false,
+        msg: "No se encontraron usuarios",
+      });
+    }
+
+    let razoncorriente;
+    let endeudamiento;
+    let razoncorrienteUser;
+    let endeudamientoUser;
+    let value = 0;
+    // dataModel - Conjunto de datos de las razones corrientes y endeudamiento de los usuarios
+    const dataModel = [];
+    const defaults = [];
+
+    users.map((user) => {
+      //razoncorriente = salarioMensual+ingresosAdicionales/egresosMensuales
+      razoncorriente =
+        (convertMonthlySalary(user.dataValues.monthlysalary) +
+          convertAdditionalIncome(user.dataValues.additionalincome)) /
+        convertExpenditure(user.dataValues.monthlyexpenditure);
+      if (user.dataValues.havecredits === "No") {
+        //Si no tiene creditos, el default es 0
+        defaults.push([0]);
+        //endeudamiento en caso que no tenga creditos es egresosMensuales/activosTotales
+        endeudamiento =
+          convertExpenditure(user.dataValues.monthlyexpenditure) /
+          convertAssets(user.dataValues.totalassets);
+      } else if (user.dataValues.havecredits === "Si") {
+        //Si tiene credito el endeudamiento es montoCredito/activosTotales
+        endeudamiento =
+          convertCredit(user.dataValues.amountcreditacquired) /
+          convertAssets(user.dataValues.totalassets);
+        if (user.dataValues.dayspastdue > 1) {
+          //si es > 1 quiere decir que tiene más de 45 días de mora, por lo que entra en default 1
+          defaults.push([1]);
+        } else {
+          //Si no, el default es 0
+          defaults.push([0]);
+        }
+      }
+      //En caso de que la razon y el endeudamiento de mayor a 1, se dejará como valor el 1
+      razoncorriente > 1 ? (razoncorriente = 1) : razoncorriente;
+      endeudamiento > 1 ? (endeudamiento = 1) : endeudamiento;
+      //Se agrega la razoncorriente y endeudamiento a la matriz de los datos de los usuarios
+      dataModel.push([razoncorriente, endeudamiento]);
+      //Como se calculará el scoring de una persona, cuando se encuentren sus datos se almacena su razon corriente y endeudamiento para usarlos más adelante
+      if (user.dataValues.id === req.user.id) {
+        razoncorrienteUser = razoncorriente;
+        endeudamientoUser = endeudamiento;
+        if (user.dataValues.havecredits === "No") {
+          value = 7;
+        }
+      }
+    });
+    //Calcule coefficients - Según el excel
+    let tmpResult = math.multiply(math.transpose(dataModel), dataModel);
+
+    tmpResult = math.inv(tmpResult);
+
+    tmpResult = math.multiply(
+      math.multiply(tmpResult, math.transpose(dataModel)),
+      defaults
+    );
+
+    tmpResult =
+      razoncorrienteUser * tmpResult[0][0] +
+      endeudamientoUser * tmpResult[1][0];
+
+    tmpResult = math.exp(tmpResult);
+
+    const scoring = ((tmpResult / (1 + tmpResult)) * 100 + value).toFixed(2);
+
+    await User.update(
+      {
+        scoring: scoring,
+      },
+      {
+        where: {
+          id: req.user.id,
+        },
+      }
+    );
+
+    return res.status(200).send({
+      ok: true,
+      msg: "Scoring calculado correctamente",
+      data: scoring,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   changePassword,
   savePersonalInfo,
@@ -568,4 +703,5 @@ module.exports = {
   getFormProgress,
   saveScoringInfo,
   getScoringInfo,
+  calculateScoring,
 };

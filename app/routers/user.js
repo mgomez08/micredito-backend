@@ -34,5 +34,10 @@ api.post(
   UserController.saveScoringInfo
 );
 api.get("/user/get-scoring-info", validateJWT, UserController.getScoringInfo);
+api.get(
+  "/user/calculate-scoring",
+  validateJWT,
+  UserController.calculateScoring
+);
 
 module.exports = api;

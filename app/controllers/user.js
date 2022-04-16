@@ -1,6 +1,6 @@
 const { User } = require("../models/index");
 const { comparePassword, hashPassword } = require("../utils/bcrypt");
-const { format, parseISO } = require("date-fns");
+const { format, parseISO, differenceInYears } = require("date-fns");
 
 const changePassword = async (req, res) => {
   try {
@@ -169,6 +169,78 @@ const savePersonalInfo = async (req, res) => {
   }
 };
 
+const getPersonalInfo = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      attributes: [
+        ["name", "names"],
+        "lastname",
+        ["date_birth", "datebirth"],
+        ["depart_birth", "departbirth"],
+        ["city_birth", "citybirth"],
+        ["type_doc", "typedoc"],
+        ["num_doc", "ndoc"],
+        "tel",
+        "age",
+        ["marital_status", "maritalstatus"],
+        ["edu_level", "educationallevel"],
+        "profession",
+        "occupation",
+        ["num_per_family_ncl", "numpersonsfamilynucleus"],
+        ["num_per_depen", "numpersonsdependents"],
+        ["type_housing", "typehousing"],
+        ["depart_resi", "departresidence"],
+        ["city_resi", "cityresidence"],
+        ["home_address", "homeaddress"],
+        ["years_resi", "yearsresidence"],
+      ],
+    });
+    if (!user) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Usuario no encontrado",
+      });
+    }
+    if (user.dataValues.datebirth !== "0000-00-00") {
+      const yearsDate = differenceInYears(
+        new Date(),
+        parseISO(user.dataValues.datebirth)
+      );
+      if (yearsDate !== user.dataValues.age) {
+        await User.update(
+          {
+            age: yearsDate,
+          },
+          {
+            where: {
+              id: req.user.id,
+            },
+          }
+        );
+      }
+      user.dataValues.age = yearsDate;
+    }
+    if (user.dataValues.datebirth === "0000-00-00") {
+      user.dataValues.datebirth = null;
+    }
+
+    return res.status(200).send({
+      ok: true,
+      msg: "Información personal obtenida correctamente",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      ok: false,
+      msg: "Error al obtener la información personal",
+    });
+  }
+};
+
 const saveFinancialInfo = async (req, res) => {
   try {
     const userObj = {
@@ -238,8 +310,67 @@ const saveFinancialInfo = async (req, res) => {
   }
 };
 
+const getFinancialInfo = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      attributes: [
+        ["years_experience", "yearsexperience"],
+        ["date_current_job", "datecurrentjob"],
+        ["work_position", "workposition"],
+        ["type_salary", "typesalary"],
+        ["type_contract", "typecontract"],
+        ["total_assets", "totalassets"],
+        ["monthly_salary", "monthlysalary"],
+        ["additional_income", "additionalincome"],
+        ["total_monthly_income", "totalmonthlyincome"],
+        ["monthly_expenditure", "monthlyexpenditure"],
+      ],
+    });
+    if (!user) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Usuario no encontrado",
+      });
+    }
+
+    if (user.dataValues.datecurrentjob !== "0000-00-00") {
+      const yearsDate = differenceInYears(
+        new Date(),
+        parseISO(user.dataValues.datecurrentjob)
+      );
+      if (yearsDate !== user.dataValues.yearsexperience) {
+        await User.update(
+          {
+            yearsexperience: yearsDate,
+          },
+          {
+            where: {
+              id: req.user.id,
+            },
+          }
+        );
+      }
+      user.dataValues.yearsexperience = yearsDate;
+    }
+    if (user.dataValues.datecurrentjob === "0000-00-00") {
+      user.dataValues.datecurrentjob = null;
+    }
+
+    return res.status(200).send({
+      ok: true,
+      msg: "Información financiera obtenida correctamente",
+      data: user,
+    });
+  } catch (error) {}
+};
+
 module.exports = {
   changePassword,
   savePersonalInfo,
+  getPersonalInfo,
   saveFinancialInfo,
+  getFinancialInfo,
 };

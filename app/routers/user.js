@@ -28,5 +28,11 @@ api.post(
   UserController.saveFormProgress
 );
 api.get("/user/get-form-progress", validateJWT, UserController.getFormProgress);
+api.post(
+  "/user/save-scoring-info",
+  validateJWT,
+  UserController.saveScoringInfo
+);
+api.get("/user/get-scoring-info", validateJWT, UserController.getScoringInfo);
 
 module.exports = api;

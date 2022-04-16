@@ -408,6 +408,7 @@ const saveFormProgress = async (req, res) => {
       where: {
         id: req.user.id,
       },
+      attributes: ["id"],
     });
     if (!user) {
       return res.status(400).send({
@@ -446,7 +447,7 @@ const getFormProgress = async (req, res) => {
       where: {
         id: req.user.id,
       },
-      attributes: ["form_progress"],
+      attributes: [["form_progress", "progress"]],
     });
     if (!user) {
       return res.status(400).send({
@@ -469,6 +470,93 @@ const getFormProgress = async (req, res) => {
   }
 };
 
+const saveScoringInfo = async (req, res) => {
+  try {
+    const have_credits = req.body.havecredits;
+    const amount_credit_acquired = req.body.amountcreditacquired;
+    const days_past_due = req.body.dayspastdue;
+
+    if (!have_credits || !amount_credit_acquired || !days_past_due) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Todos los campos son obligatorios",
+      });
+    }
+
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      attributes: ["id"],
+    });
+
+    if (!user) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Usuario no encontrado",
+      });
+    }
+
+    await User.update(
+      {
+        have_credits,
+        amount_credit_acquired,
+        days_past_due,
+      },
+      {
+        where: {
+          id: req.user.id,
+        },
+      }
+    );
+
+    return res.status(200).send({
+      ok: true,
+      msg: "Información de scoring actualizada correctamente",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      ok: false,
+      msg: "Error al actualizar la información de scoring",
+    });
+  }
+};
+
+const getScoringInfo = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      attributes: [
+        ["have_credits", "havecredits"],
+        ["amount_credit_acquired", "amountcreditacquired"],
+        ["days_past_due", "dayspastdue"],
+        "scoring",
+      ],
+    });
+    if (!user) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Usuario no encontrado",
+      });
+    }
+
+    return res.status(200).send({
+      ok: true,
+      msg: "Información de scoring obtenida correctamente",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      ok: false,
+      msg: "Error al obtener la información de scoring",
+    });
+  }
+};
+
 module.exports = {
   changePassword,
   savePersonalInfo,
@@ -478,4 +566,6 @@ module.exports = {
   getColumnsNull,
   saveFormProgress,
   getFormProgress,
+  saveScoringInfo,
+  getScoringInfo,
 };

@@ -394,6 +394,81 @@ const getColumnsNull = async (req, res) => {
     });
   }
 };
+
+const saveFormProgress = async (req, res) => {
+  try {
+    const progress = req.body.progress;
+    if (!progress) {
+      return res.status(400).send({
+        ok: false,
+        msg: "El progreso es obligatorio",
+      });
+    }
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+    });
+    if (!user) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Usuario no encontrado",
+      });
+    }
+
+    await User.update(
+      {
+        form_progress: progress,
+      },
+      {
+        where: {
+          id: req.user.id,
+        },
+      }
+    );
+
+    return res.status(200).send({
+      ok: true,
+      msg: "Progreso de formulario actualizado correctamente",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      ok: false,
+      msg: "Error al actualizar el progreso de formulario",
+    });
+  }
+};
+
+const getFormProgress = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      attributes: ["form_progress"],
+    });
+    if (!user) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Usuario no encontrado",
+      });
+    }
+
+    return res.status(200).send({
+      ok: true,
+      msg: "Progreso de formulario obtenido correctamente",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      ok: false,
+      msg: "Error al obtener el progreso de formulario",
+    });
+  }
+};
+
 module.exports = {
   changePassword,
   savePersonalInfo,
@@ -401,4 +476,6 @@ module.exports = {
   saveFinancialInfo,
   getFinancialInfo,
   getColumnsNull,
+  saveFormProgress,
+  getFormProgress,
 };

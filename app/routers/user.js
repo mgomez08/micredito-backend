@@ -22,5 +22,11 @@ api.get(
   UserController.getFinancialInfo
 );
 api.get("/user/get-columns-nulls", validateJWT, UserController.getColumnsNull);
+api.post(
+  "/user/save-form-progress",
+  validateJWT,
+  UserController.saveFormProgress
+);
+api.get("/user/get-form-progress", validateJWT, UserController.getFormProgress);
 
 module.exports = api;

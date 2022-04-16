@@ -10,10 +10,16 @@ api.post(
   validateJWT,
   UserController.savePersonalInfo
 );
+api.get("/user/get-personal-info", validateJWT, UserController.getPersonalInfo);
 api.post(
   "/user/save-financial-info",
   validateJWT,
   UserController.saveFinancialInfo
+);
+api.get(
+  "/user/get-financial-info",
+  validateJWT,
+  UserController.getFinancialInfo
 );
 
 module.exports = api;

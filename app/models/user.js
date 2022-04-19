@@ -47,11 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       city_birth: {
         type: DataTypes.STRING(60),
-        validate: {
-          isAlpha: {
-            msg: "La ciudad de nacimiento solo puede contener letras",
-          },
-        },
+        validate: {},
       },
       type_doc: {
         type: DataTypes.STRING(11),
@@ -159,11 +155,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       city_resi: {
         type: DataTypes.STRING(60),
-        validate: {
-          isAlpha: {
-            msg: "La ciudad de residencia solo puede contener letras",
-          },
-        },
+        validate: {},
       },
       home_address: {
         type: DataTypes.STRING(100),

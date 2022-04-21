@@ -28,6 +28,4 @@ const validateJWT = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  validateJWT,
-};
+module.exports = validateJWT;

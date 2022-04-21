@@ -15,7 +15,7 @@ const signUp = async (req, res) => {
       lastname: req.body.lastname,
       email: req.body.email.toLowerCase(),
       tel: req.body.tel,
-      role: 1,
+      id_rol: 1,
       active: 1,
       password: req.body.password,
     };

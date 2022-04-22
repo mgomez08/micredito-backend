@@ -379,7 +379,7 @@ const getColumnsNull = async (req, res) => {
       attributes: [
         [
           Sequelize.literal(
-            `SUM((date_birth = '0000-00-00') +(depart_birth = '') +(city_birth = '') +(age IS NULL) +(marital_status = '') +(edu_level = '') +(profession = '') +(occupation = '') +(num_per_family_ncl IS NULL) +(num_per_depen IS NULL) +(type_housing = '') +(depart_resi = '') +(city_resi = '') +(home_address = '') +(years_resi IS NULL) + IFNULL((years_experience IS NULL) +(date_current_job = '0000-00-00') + +(work_position = '') +(type_salary = "") +(type_contract = '') +(total_assets IS NULL) +(monthly_salary IS NULL) +(additional_income IS NULL) +(total_monthly_income IS NULL) +(monthly_expenditure IS NULL),7))`
+            `SUM((date_birth IS NULL) +(depart_birth IS NULL) +(city_birth IS NULL) +(age IS NULL) +(marital_status IS NULL) +(edu_level IS NULL) +(profession IS NULL) +(occupation IS NULL) +(num_per_family_ncl IS NULL) +(num_per_depen IS NULL) +(type_housing IS NULL) +(depart_resi IS NULL) +(city_resi IS NULL) +(home_address IS NULL) +(years_resi IS NULL) + IFNULL((years_experience IS NULL) +(date_current_job IS NULL) + +(work_position IS NULL) +(type_salary = "") +(type_contract IS NULL) +(total_assets IS NULL) +(monthly_salary IS NULL) +(additional_income IS NULL) +(total_monthly_income IS NULL) +(monthly_expenditure IS NULL),7))`
           ),
           "value",
         ],

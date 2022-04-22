@@ -250,7 +250,6 @@ const getPersonalInfo = async (req, res) => {
 const saveFinancialInfo = async (req, res) => {
   try {
     const userObj = {
-      years_experience: req.body.yearsexperience,
       date_current_job: format(parseISO(req.body.datecurrentjob), "yyyy-MM-dd"),
       work_position: req.body.workposition,
       type_salary: req.body.typesalary,
@@ -261,9 +260,7 @@ const saveFinancialInfo = async (req, res) => {
       total_monthly_income: req.body.totalmonthlyincome,
       monthly_expenditure: req.body.monthlyexpenditure,
     };
-    console.log(userObj);
     if (
-      !userObj.years_experience ||
       !userObj.date_current_job ||
       !userObj.work_position ||
       !userObj.type_salary ||

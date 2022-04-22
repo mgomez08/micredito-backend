@@ -213,7 +213,7 @@ const getPersonalInfo = async (req, res) => {
         msg: "Usuario no encontrado",
       });
     }
-    if (user.dataValues.datebirth !== "0000-00-00") {
+    if (user.dataValues.datebirth !== null) {
       const yearsDate = differenceInYears(
         new Date(),
         parseISO(user.dataValues.datebirth)
@@ -231,9 +231,6 @@ const getPersonalInfo = async (req, res) => {
         );
       }
       user.dataValues.age = yearsDate;
-    }
-    if (user.dataValues.datebirth === "0000-00-00") {
-      user.dataValues.datebirth = null;
     }
 
     return res.status(200).send({
@@ -345,7 +342,7 @@ const getFinancialInfo = async (req, res) => {
       });
     }
 
-    if (user.dataValues.datecurrentjob !== "0000-00-00") {
+    if (user.dataValues.datecurrentjob !== null) {
       const yearsDate = differenceInYears(
         new Date(),
         parseISO(user.dataValues.datecurrentjob)
@@ -363,9 +360,6 @@ const getFinancialInfo = async (req, res) => {
         );
       }
       user.dataValues.yearsexperience = yearsDate;
-    }
-    if (user.dataValues.datecurrentjob === "0000-00-00") {
-      user.dataValues.datecurrentjob = null;
     }
 
     return res.status(200).send({

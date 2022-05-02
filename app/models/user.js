@@ -99,27 +99,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       edu_level: {
         type: DataTypes.STRING(20),
-        validate: {
-          isAlpha: {
-            msg: "El nivel de estudio solo puede contener letras",
-          },
-        },
+        validate: {},
       },
       profession: {
         type: DataTypes.STRING(60),
-        validate: {
-          isAlpha: {
-            msg: "La profesion solo puede contener letras",
-          },
-        },
+        validate: {},
       },
       occupation: {
         type: DataTypes.STRING(60),
-        validate: {
-          isAlpha: {
-            msg: "La ocupacion solo puede contener letras",
-          },
-        },
+        validate: {},
       },
       num_per_family_ncl: {
         type: DataTypes.INTEGER(3),
@@ -237,11 +225,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       work_position: {
         type: DataTypes.STRING(60),
-        validate: {
-          isAlpha: {
-            msg: "El puesto de trabajo solo debe tener letras",
-          },
-        },
+        validate: {},
       },
       type_salary: {
         type: DataTypes.STRING(11),

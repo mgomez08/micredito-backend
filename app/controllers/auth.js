@@ -10,7 +10,7 @@ const signUp = async (req, res) => {
   try {
     const userObj = {
       type_doc: req.body.typedoc,
-      num_doc: req.body.numdoc,
+      num_doc: req.body.ndoc,
       name: req.body.names,
       lastname: req.body.lastname,
       email: req.body.email.toLowerCase(),

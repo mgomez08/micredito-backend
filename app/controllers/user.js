@@ -476,7 +476,7 @@ const saveScoringInfo = async (req, res) => {
     const amount_credit_acquired = req.body.amountcreditacquired;
     const days_past_due = req.body.dayspastdue;
 
-    if (!have_credits || !amount_credit_acquired || !days_past_due) {
+    if (!have_credits) {
       return res.status(400).send({
         ok: false,
         msg: "Todos los campos son obligatorios",
@@ -587,7 +587,7 @@ const calculateScoring = async (req, res) => {
         },
       },
     });
-
+    console.log(users);
     if (!users) {
       return res.status(400).send({
         ok: false,
@@ -648,7 +648,6 @@ const calculateScoring = async (req, res) => {
     let tmpResult = math.multiply(math.transpose(dataModel), dataModel);
 
     tmpResult = math.inv(tmpResult);
-
     tmpResult = math.multiply(
       math.multiply(tmpResult, math.transpose(dataModel)),
       defaults

@@ -11,9 +11,11 @@ app.use(cors());
 const authRoutes = require("./routers/auth");
 const userRoutes = require("./routers/user");
 const adminRoutes = require("./routers/admin");
+const bankRoutes = require("./routers/bank");
 //Routes
 app.use(`/api/${API_VERSION}`, authRoutes);
 app.use(`/api/${API_VERSION}`, userRoutes);
 app.use(`/api/${API_VERSION}`, adminRoutes);
+app.use(`/api/${API_VERSION}`, bankRoutes);
 
 module.exports = app;

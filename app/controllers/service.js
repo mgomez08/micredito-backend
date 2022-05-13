@@ -27,7 +27,7 @@ const createService = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al crear el servicio",
     });
@@ -69,7 +69,7 @@ const editService = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al editar el servicio",
     });
@@ -93,7 +93,7 @@ const deleteService = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al eliminar el servicio",
     });
@@ -110,7 +110,7 @@ const getAllServices = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al obtener los servicios",
     });

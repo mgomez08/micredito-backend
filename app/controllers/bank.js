@@ -29,7 +29,7 @@ const createBank = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al crear el banco",
     });
@@ -72,7 +72,7 @@ const editBank = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al editar el banco",
     });
@@ -98,7 +98,7 @@ const deleteBank = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al eliminar el banco",
     });
@@ -115,7 +115,7 @@ const getAllBanks = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al obtener los bancos",
     });

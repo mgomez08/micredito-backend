@@ -3,7 +3,7 @@ const { Interest } = require("../models/index");
 const createInterest = async (req, res) => {
   try {
     const { id_bank, id_service, tasa_men, tasa_anu } = req.body;
-
+    500;
     if (!id_bank || !id_service || !tasa_men || !tasa_anu) {
       return res.status(400).send({
         ok: false,
@@ -25,7 +25,7 @@ const createInterest = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al crear las tasas de interés",
     });
@@ -63,7 +63,7 @@ const editInterest = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al editar las tasas de interés",
     });
@@ -87,7 +87,7 @@ const deleteInterest = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al eliminar las tasas de interés",
     });

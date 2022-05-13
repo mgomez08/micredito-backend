@@ -8,6 +8,6 @@ const api = express.Router();
 api.post("/bank/", validateJWT, isAdmin, BankController.createBank);
 api.put("/bank/:id", validateJWT, isAdmin, BankController.editBank);
 api.delete("/bank/:id", validateJWT, isAdmin, BankController.deleteBank);
-api.get("/bank/", validateJWT, isAdmin, BankController.getAllBanks);
+api.get("/bank", validateJWT, isAdmin, BankController.getAllBanks);
 
 module.exports = api;

@@ -42,24 +42,25 @@ const editBank = async (req, res) => {
     const { name_bank } = req.body;
     const bank = await Bank.findByPk(id);
 
-    if (!bank)
+    if (!bank) {
       return res.status(400).send({
         ok: false,
         msg: "El banco con este id no existe",
       });
+    }
 
-    if (!name_bank)
+    if (!name_bank) {
       return res.status(400).send({
         ok: false,
         msg: "Todos los campos son obligatorios",
       });
-
-    if (name_bank.length < 3)
+    }
+    if (name_bank.length < 3) {
       return res.status(400).send({
         ok: false,
         msg: "El nombre del banco debe tener al menos 3 caracteres",
       });
-
+    }
     await bank.update({
       name_bank,
     });
@@ -83,12 +84,12 @@ const deleteBank = async (req, res) => {
     const { id } = req.params;
     const bank = await Bank.findByPk(id);
 
-    if (!bank)
+    if (!bank) {
       return res.status(400).send({
         ok: false,
         msg: "El banco con este id no existe",
       });
-
+    }
     await bank.destroy();
 
     return res.status(200).send({

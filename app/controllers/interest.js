@@ -1,9 +1,8 @@
-const { Interest } = require("../models/index");
+const { Interest, Bank, Service } = require("../models/index");
 
 const createInterest = async (req, res) => {
   try {
     const { id_bank, id_service, tasa_men, tasa_anu } = req.body;
-    500;
     if (!id_bank || !id_service || !tasa_men || !tasa_anu) {
       return res.status(400).send({
         ok: false,
@@ -96,7 +95,12 @@ const deleteInterest = async (req, res) => {
 
 const getAllInterests = async (req, res) => {
   try {
-    const interests = await Interest.findAll();
+    const interests = await Interest.findAll({
+      include: [
+        { model: Bank, attributes: ["id", "name_bank"] },
+        { model: Service, attributes: ["id", "name_service"] },
+      ],
+    });
     return res.status(200).send({
       ok: true,
       msg: "Tasas de interés obtenidas correctamente",

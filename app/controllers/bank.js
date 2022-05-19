@@ -122,9 +122,40 @@ const getAllBanks = async (req, res) => {
   }
 };
 
+const getBank = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).send({
+      ok: false,
+      msg: "El id es obligatorio",
+    });
+  }
+  try {
+    const bank = await Bank.findByPk(id);
+    if (!bank) {
+      return res.status(400).send({
+        ok: false,
+        msg: "El banco con este id no existe",
+      });
+    }
+    return res.status(200).send({
+      ok: true,
+      msg: "Banco obtenido correctamente",
+      data: bank,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      ok: false,
+      msg: "Error al obtener el banco",
+    });
+  }
+};
+
 module.exports = {
   createBank,
   editBank,
   deleteBank,
   getAllBanks,
+  getBank,
 };

@@ -116,9 +116,41 @@ const getAllServices = async (req, res) => {
     });
   }
 };
+
+const getService = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).send({
+      ok: false,
+      msg: "El id es obligatorio",
+    });
+  }
+  try {
+    const service = await Service.findByPk(id);
+    if (!service) {
+      return res.status(400).send({
+        ok: false,
+        msg: "El service con este id no existe",
+      });
+    }
+    return res.status(200).send({
+      ok: true,
+      msg: "Servicio obtenido correctamente",
+      data: service,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      ok: false,
+      msg: "Error al obtener el servicio",
+    });
+  }
+};
+
 module.exports = {
   createService,
   editService,
   deleteService,
   getAllServices,
+  getService,
 };

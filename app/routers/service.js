@@ -14,5 +14,6 @@ api.delete(
   ServiceController.deleteService
 );
 api.get("/service", validateJWT, isAdmin, ServiceController.getAllServices);
+api.get("/service/:id", validateJWT, isAdmin, ServiceController.getService);
 
 module.exports = api;

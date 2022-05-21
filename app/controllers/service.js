@@ -130,7 +130,7 @@ const getService = async (req, res) => {
     if (!service) {
       return res.status(400).send({
         ok: false,
-        msg: "El service con este id no existe",
+        msg: "El servicio con este id no existe",
       });
     }
     return res.status(200).send({

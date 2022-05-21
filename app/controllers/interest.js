@@ -114,9 +114,40 @@ const getAllInterests = async (req, res) => {
     });
   }
 };
+
+const getInterest = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).send({
+      ok: false,
+      msg: "El id es obligatorio",
+    });
+  }
+  try {
+    const interest = await Interest.findByPk(id);
+    if (!interest) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Las tasas de interés con este id no existe",
+      });
+    }
+    return res.status(200).send({
+      ok: true,
+      msg: "Tasas de interés obtenidas correctamente",
+      data: interest,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      ok: false,
+      msg: "Error al obtener las tasas de interés",
+    });
+  }
+};
 module.exports = {
   createInterest,
   editInterest,
   deleteInterest,
   getAllInterests,
+  getInterest,
 };

@@ -14,5 +14,6 @@ api.delete(
   InterestController.deleteInterest
 );
 api.get("/interest", validateJWT, isAdmin, InterestController.getAllInterests);
+api.get("/interest/:id", validateJWT, isAdmin, InterestController.getInterest);
 
 module.exports = api;

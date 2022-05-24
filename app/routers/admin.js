@@ -6,5 +6,11 @@ const isAdmin = require("../middlewares/isAdmin");
 const api = express.Router();
 
 api.get("/admin/getUsers", validateJWT, isAdmin, AdminController.getAllUsers);
+api.post(
+  "/admin/change-active-user/:id",
+  validateJWT,
+  isAdmin,
+  AdminController.changeActiveStatusUser
+);
 
 module.exports = api;

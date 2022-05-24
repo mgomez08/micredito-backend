@@ -23,6 +23,39 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const changeActiveStatusUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { active } = req.body;
+    if (active === undefined || !id) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Todos los datos son obligatorios",
+      });
+    }
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).send({
+        ok: false,
+        msg: "No se encontró el usuario",
+      });
+    }
+    await user.update({ active: !active });
+    return res.status(200).send({
+      ok: true,
+      msg: "Usuario actualizado",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      ok: false,
+      msg: "Error al actualizar usuario",
+    });
+  }
+};
+
 module.exports = {
   getAllUsers,
+  changeActiveStatusUser,
 };

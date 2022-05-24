@@ -103,8 +103,7 @@ const signIn = async (req, res) => {
         msg: "El correo no está registrado",
       });
     }
-
-    if (user.active === 0) {
+    if (!user.active) {
       return res.status(400).send({
         ok: false,
         msg: "El usuario no está activo",
@@ -168,7 +167,7 @@ const refreshAccessToken = async (req, res) => {
       });
     }
 
-    if (user.active === 0) {
+    if (!user.active) {
       return res.status(400).send({
         ok: false,
         msg: "El usuario no está activo",

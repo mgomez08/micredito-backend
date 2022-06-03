@@ -128,14 +128,15 @@ const savePersonalInfo = async (req, res) => {
       !userObj.edu_level ||
       !userObj.profession ||
       !userObj.occupation ||
-      !userObj.num_per_family_ncl ||
-      !userObj.num_per_depen ||
+      !userObj.num_per_family_ncl.toString() ||
+      !userObj.num_per_depen.toString() ||
       !userObj.type_housing ||
       !userObj.depart_resi ||
       !userObj.city_resi ||
       !userObj.home_address ||
-      !userObj.years_resi
+      !userObj.years_resi.toString()
     ) {
+      console.log(userObj);
       return res.status(400).send({
         ok: false,
         msg: "Todos los campos son obligatorios",

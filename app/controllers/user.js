@@ -585,10 +585,18 @@ const calculateScoring = async (req, res) => {
           monthly_expenditure: {
             [Op.not]: null,
           },
+          have_credits: {
+            [Op.not]: null,
+          },
+          amount_credit_acquired: {
+            [Op.not]: null,
+          },
+          days_past_due: {
+            [Op.not]: null,
+          },
         },
       },
     });
-    console.log(users);
     if (!users) {
       return res.status(400).send({
         ok: false,
@@ -604,7 +612,6 @@ const calculateScoring = async (req, res) => {
     // dataModel - Conjunto de datos de las razones corrientes y endeudamiento de los usuarios
     const dataModel = [];
     const defaults = [];
-
     users.map((user) => {
       //razoncorriente = salarioMensual+ingresosAdicionales/egresosMensuales
       razoncorriente =

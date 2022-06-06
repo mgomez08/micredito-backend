@@ -2,7 +2,9 @@ const { User } = require("../models/index");
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      attributes: ["id", "name", "email", "active"],
+    });
     if (!users) {
       return res.status(404).send({
         ok: false,
@@ -33,14 +35,17 @@ const changeActiveStatusUser = async (req, res) => {
         msg: "Todos los datos son obligatorios",
       });
     }
-    const user = await User.findByPk(id);
+    const user = await User.findOne({
+      where: { id },
+      attributes: ["id", "name", "email", "active"],
+    });
     if (!user) {
       return res.status(404).send({
         ok: false,
         msg: "No se encontró el usuario",
       });
     }
-    await user.update({ active: !active });
+    await user.update({ active });
     return res.status(200).send({
       ok: true,
       msg: "Usuario actualizado",

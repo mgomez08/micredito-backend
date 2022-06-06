@@ -3,7 +3,7 @@ const { User } = require("../models/index");
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({
-      attributes: ["id", "name", "email", "active"],
+      attributes: ["id", "name", "email", "active", "id_rol"],
     });
     if (!users) {
       return res.status(404).send({
@@ -37,7 +37,7 @@ const changeActiveStatusUser = async (req, res) => {
     }
     const user = await User.findOne({
       where: { id },
-      attributes: ["id", "name", "email", "active"],
+      attributes: ["id", "name", "email", "active", "id_rol"],
     });
     if (!user) {
       return res.status(404).send({

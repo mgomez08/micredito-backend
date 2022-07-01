@@ -40,13 +40,17 @@ const generateRefreshToken = (user) => {
 
 const verifyToken = (token) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, SECRET_KEY, (err, decoded) => {
-      if (err) {
-        console.log(err);
-        reject("No se pudo verificar el token, intente de nuevo.");
-      }
-      resolve(decoded);
-    });
+    if (!token) {
+      jwt.verify(token, SECRET_KEY, (err, decoded) => {
+        if (err) {
+          console.log(err);
+          reject("No se pudo verificar el token, intente de nuevo.");
+        }
+        resolve(decoded);
+      });
+    } else {
+      reject("No se pudo verificar el token, intente de nuevo.");
+    }
   });
 };
 

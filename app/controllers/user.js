@@ -1,4 +1,4 @@
-const { User, Sequelize } = require("../models/index");
+const { User, Sequelize, Bank, Service, Interest } = require("../models/index");
 const { Op } = require("sequelize");
 const { comparePassword, hashPassword } = require("../utils/bcrypt");
 const { format, parseISO, differenceInYears } = require("date-fns");
@@ -551,7 +551,7 @@ const getScoringInfo = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).send({
+    res.status(500).send({
       ok: false,
       msg: "Error al obtener la información de scoring",
     });
@@ -690,6 +690,44 @@ const calculateScoring = async (req, res) => {
   }
 };
 
+const getBankServices = async (req, res) => {
+  try {
+    const data = await Interest.findAll({
+      order: [
+        [Bank, "name_bank", "ASC"],
+        [Service, "name_service", "ASC"],
+      ],
+      include: [
+        {
+          model: Service,
+          attributes: ["id", "name_service"],
+        },
+        {
+          model: Bank,
+          attributes: ["id", "name_bank"],
+        },
+      ],
+    });
+    if (!data) {
+      return res.status(400).send({
+        ok: false,
+        msg: "No se encontraron servicios de bancos",
+      });
+    }
+    return res.status(200).send({
+      ok: true,
+      msg: "Servicios de bancos obtenidos correctamente",
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      ok: false,
+      msg: "Error al obtener los servicios de bancos",
+    });
+  }
+};
+
 module.exports = {
   changePassword,
   savePersonalInfo,
@@ -702,4 +740,5 @@ module.exports = {
   saveScoringInfo,
   getScoringInfo,
   calculateScoring,
+  getBankServices,
 };

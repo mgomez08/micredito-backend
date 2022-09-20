@@ -1,9 +1,15 @@
 const { User } = require("../models/index");
+const { Op } = require("sequelize");
 
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({
       attributes: ["id", "name", "email", "active", "id_rol"],
+      where: {
+        id: {
+          [Op.not]: req.user.id,
+        },
+      },
     });
     if (!users) {
       return res.status(404).send({

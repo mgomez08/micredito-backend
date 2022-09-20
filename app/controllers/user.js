@@ -251,6 +251,7 @@ const getPersonalInfo = async (req, res) => {
 const saveFinancialInfo = async (req, res) => {
   try {
     const userObj = {
+      years_experience: req.body.yearsexperience,
       date_current_job: format(parseISO(req.body.datecurrentjob), "yyyy-MM-dd"),
       work_position: req.body.workposition,
       type_salary: req.body.typesalary,

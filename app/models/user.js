@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       depart_birth: {
         type: DataTypes.STRING(40),
         validate: {
-          isAlpha: {
+          notEmpty: {
             msg: "El departamento de nacimiento solo puede contener letras",
           },
         },
@@ -128,7 +128,7 @@ module.exports = (sequelize, DataTypes) => {
       type_housing: {
         type: DataTypes.STRING(20),
         validate: {
-          isAlpha: {
+          notEmpty: {
             msg: "El tipo de vivienda solo puede contener letras",
           },
         },
@@ -136,7 +136,7 @@ module.exports = (sequelize, DataTypes) => {
       depart_resi: {
         type: DataTypes.STRING(40),
         validate: {
-          isAlpha: {
+          notEmpty: {
             msg: "El departamento de residencia solo puede contener letras",
           },
         },
@@ -230,16 +230,16 @@ module.exports = (sequelize, DataTypes) => {
       type_salary: {
         type: DataTypes.STRING(11),
         validate: {
-          isAlpha: {
-            msg: "El tipo de salario solo debe tener letras",
+          notEmpty: {
+            msg: "El tipo de salario solo debe tener letras o no estar vacío",
           },
         },
       },
       type_contract: {
         type: DataTypes.STRING(30),
         validate: {
-          isAlpha: {
-            msg: "El tipo de contrato solo debe tener letras",
+          notEmpty: {
+            msg: "El tipo de contrato solo debe tener letras o no estar vacío",
           },
         },
       },
@@ -286,7 +286,7 @@ module.exports = (sequelize, DataTypes) => {
       have_credits: {
         type: DataTypes.STRING(3),
         validate: {
-          isAlpha: {
+          notEmpty: {
             msg: "El campo de si tiene créditos solo debe tener letras",
           },
         },

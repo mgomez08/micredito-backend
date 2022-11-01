@@ -10,6 +10,7 @@ const {
   convertMonthlySalary,
   convertAdditionalIncome,
 } = require("../utils/convertValues");
+const { calculateCredit } = require("../utils/credit");
 
 const changePassword = async (req, res) => {
   try {
@@ -729,6 +730,30 @@ const getBankServices = async (req, res) => {
   }
 };
 
+const simulateCredit = async (req, res) => {
+  try {
+    const { amount, period, interest } = req.body;
+    if (!amount || !period || !interest) {
+      return res.status(400).send({
+        ok: false,
+        msg: "Todos los campos son obligatorios",
+      });
+    }
+    const dues = calculateCredit({ amount, period, interest });
+    return res.status(200).send({
+      ok: true,
+      msg: "Calculado",
+      data: dues,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      ok: false,
+      msg: "Error al simular el crédito",
+    });
+  }
+};
+
 module.exports = {
   changePassword,
   savePersonalInfo,
@@ -742,4 +767,5 @@ module.exports = {
   getScoringInfo,
   calculateScoring,
   getBankServices,
+  simulateCredit,
 };

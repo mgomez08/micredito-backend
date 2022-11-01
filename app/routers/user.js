@@ -40,5 +40,6 @@ api.get(
   UserController.calculateScoring
 );
 api.get("/user/get-bank-services", validateJWT, UserController.getBankServices);
+api.post("/user/simulate-credit", validateJWT, UserController.simulateCredit);
 
 module.exports = api;

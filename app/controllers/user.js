@@ -590,12 +590,6 @@ const calculateScoring = async (req, res) => {
           have_credits: {
             [Op.not]: null,
           },
-          amount_credit_acquired: {
-            [Op.not]: null,
-          },
-          days_past_due: {
-            [Op.not]: null,
-          },
         },
       },
     });

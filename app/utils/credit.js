@@ -11,7 +11,10 @@ const calculateCredit = ({ amount, period, interest }) => {
       fee: PMT,
       interest: Math.round(lastAmount * interest),
       capital: Math.round(PMT - lastAmount * interest),
-      balance: Math.round(lastAmount - (PMT - lastAmount * interest)),
+      balance:
+        i === period
+          ? 0
+          : Math.round(lastAmount - (PMT - lastAmount * interest)),
       due: i,
     });
     lastAmount = Math.round(lastAmount - (PMT - lastAmount * interest));
